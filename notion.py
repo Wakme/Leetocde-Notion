@@ -2,6 +2,7 @@ import requests
 import json
 import logging
 import os
+import codeparser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # 切换目录到当前脚本下
 
@@ -52,13 +53,16 @@ def submit_questions(questions):
 
 def submit_question(question):
     title = question['fid'] + ". " + question['title']
-    code = question['code']
+    parsed_code = codeparser.parse_code(question['code'])
+    code = parsed_code['code']
     link = leetcode_url + question['titleSlug']
-    tags = ""
-    for t in question['tags']:
-        if len(tags) != 0:
-            tags += ", "
-        tags += t
+    tags = parsed_code['tags']
+    print( [{"name": t} for t in tags])
+    # 官方给出的数组
+    # for t in question['tags']:
+    #     if len(tags) != 0:
+    #         tags += ", "
+    #     tags += t
     try:
         r = requests.request("POST",
                              "https://api.notion.com/v1/pages",
@@ -68,7 +72,9 @@ def submit_question(question):
                                      "Title": {"title": [{"type": "text", "text": {"content": title}}]},
                                      # "描述": {"rich_text": [{"type": "text", "text": {"content": content}}]},
                                      "Link": {"url": link},
-                                     "Tag": {"rich_text": [{"type": "text", "text": {"content": tags}}]},
+                                     "Tag": {"type": "multi_select", "multi_select": [{"name": t} for t in tags]},
+                                     "Source": {"type": "select", "select": {"name": "Leetcode"}},
+                                     "Status": {"type": "select", "select": {"name": "🌓AC"}},
                                  },
                                  "children": [
                                      {
