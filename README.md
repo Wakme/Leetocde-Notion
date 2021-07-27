@@ -1,2 +1,2 @@
-# Leetocde-Notion
-上传Leetcode提交记录到Notion笔记中
+# Leetcode-Notion
+将Leetcode提交的代码自动提交到Notion的仓库中.

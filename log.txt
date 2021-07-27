@@ -1,0 +1,978 @@
+2021-07-25 21:09:07,367 - leetcode - INFO - 登录成功!
+2021-07-25 21:09:07,947 - leetcode - INFO - 获取代码:class Solution {
+    // @Notion
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        if(n > m) return findMedianSortedArrays(nums2, nums1);
+        int l = 0, lma = (n + m + 1) / 2, r = n;
+        while(l < r){
+            int mid = l + r + 1 >> 1;
+            int l1 = mid, l2 = lma - l1;
+            if(nums1[l1 - 1] <= nums2[l2]) l = mid;
+            else r = mid - 1;
+        }
+        int l1 = l, l2 = lma - l;
+        int nums1lma = (l1 == 0 ? Integer.MIN_VALUE: nums1[l1 - 1]);
+        int nums1rmi = (l1 == n ? Integer.MAX_VALUE: nums1[l1]);
+        int nums2lma = (l2 ==   0 ? Integer.MIN_VALUE: nums2[l2 - 1]);
+        int nums2rmi = (l2 == m ? Integer.MAX_VALUE: nums2[l2]);
+        int ma = Math.max(nums1lma, nums2lma);
+        int mi = Math.min(nums1rmi, nums2rmi);
+        if((n + m) % 2 == 0) return (ma + mi) / 2.0;
+        return ma * 1.0;
+    }
+}
+2021-07-25 21:09:08,059 - leetcode - INFO - 获取代码:/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // @Notion
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(), r = dummy;
+        int t = 0;
+        while(l1 != null || l2 != null || t != 0){
+            if(l1 != null) {
+                t += l1.val;
+                l1 = l1.next;
+            }
+            if(l2 != null) {
+                t += l2.val;
+                l2 = l2.next;
+            }
+            r = r.next = new ListNode(t % 10);
+            t /= 10;
+        }
+        return dummy.next;
+    }
+}
+2021-07-25 21:09:08,173 - leetcode - INFO - 获取代码:class Solution {
+    // @Notion
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> mp = new HashMap<>();
+        int n = nums.length;
+        for(int i = 0; i < n; i ++ ){
+            if(mp.containsKey(target - nums[i])) return new int[]{mp.get(target - nums[i]), i};
+            mp.put(nums[i], i);
+        }
+        return new int[]{-1, -1};
+    }
+}
+2021-07-25 21:09:08,323 - leetcode - INFO - 获取代码:class Solution {
+    /**
+    * @Notion 
+    */
+    long P = 1331;
+    long[] p, ha;
+    long get(int l, int r){
+        return ha[r] - ha[l - 1] * p[r - l + 1];
+    }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<Long> st = new HashSet();
+        for(int i = 0; i < wordDict.size(); i ++ ){
+            String t = wordDict.get(i);
+            long h = 0;
+            for(int j = 0; j < t.length(); j ++ )
+                h = h * P + t.charAt(j);
+            st.add(h);
+        }
+        int n = s.length();
+        p = new long[n + 1];
+        ha = new long[n + 1];
+        p[0] = 1;
+        for(int i = 1; i <= n; i ++ ){
+            p[i] = P * p[i - 1];
+            ha[i] = ha[i - 1] * P + s.charAt(i - 1);
+        }
+        boolean[] f = new boolean[n + 1];
+        f[0] = true;
+        for(int i = 1; i <= n; i ++ )
+            if(f[i - 1]){
+                for(int j = i; j <= n; j ++ )
+                    if(st.contains(get(i, j))){
+                        f[j] = true;
+                        if(j == n) return true;
+                    }
+            }
+        return false;
+    }
+}
+2021-07-25 21:09:08,434 - leetcode - INFO - 获取代码:class Solution {
+    /**
+     */
+    long P = 1331;
+    long[] p, ha;
+    long get(int l, int r){
+        return ha[r] - ha[l - 1] * p[r - l + 1];
+    }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<Long> st = new HashSet();
+        for(int i = 0; i < wordDict.size(); i ++ ){
+            String t = wordDict.get(i);
+            long h = 0;
+            for(int j = 0; j < t.length(); j ++ )
+                h = h * P + t.charAt(j);
+            st.add(h);
+        }
+        int n = s.length();
+        p = new long[n + 1];
+        ha = new long[n + 1];
+        p[0] = 1;
+        for(int i = 1; i <= n; i ++ ){
+            p[i] = P * p[i - 1];
+            ha[i] = ha[i - 1] * P + s.charAt(i - 1);
+        }
+        boolean[] f = new boolean[n + 1];
+        f[0] = true;
+        for(int i = 1; i <= n; i ++ )
+            if(f[i - 1]){
+                for(int j = i; j <= n; j ++ )
+                    if(st.contains(get(i, j))){
+                        f[j] = true;
+                        if(j == n) return true;
+                    }
+            }
+        return false;
+    }
+}
+2021-07-25 21:09:08,543 - leetcode - INFO - 获取代码:class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        int[][] f = new int[n + 1][n + 1];
+        for(int i = 0; i <= n; i ++ ) Arrays.fill(f[i], (int)2e9);
+        f[0][0] = 0;
+        int res = (int)2e9;
+        for(int i = 1; i <= n; i ++ ){
+            for(int j = 1; j <= i; j ++ ){
+                int t = triangle.get(i - 1).get(j - 1);
+                f[i][j] = Math.min(f[i - 1][j], f[i - 1][j - 1]) + t;
+                if(i == n)
+                    res = Math.min(res, f[i][j]);
+            }
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:08,661 - leetcode - INFO - 获取代码:class Solution {
+    int min(int a, int b, int c){
+        int res = Math.min(a, b);
+        return Math.min(res, c);
+    }
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length, m = matrix[0].length;
+        int[][] f = new int[n + 1][m + 2];
+        for(int i = 0; i <= n; i ++ ) f[i][0] = f[i][m + 1] = Integer.MAX_VALUE;
+        int res = (int)2e9;
+        for(int i = 1; i <= n; i ++ ){
+            for(int j = 1; j <= m; j ++ ){
+                f[i][j] = matrix[i - 1][j - 1] + min(f[i - 1][j - 1], f[i - 1][j], f[i - 1][j + 1]);
+                if(i == n) res = Math.min(res, f[i][j]);
+            }
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:08,896 - leetcode - INFO - 获取代码:class Solution {
+    public int[] restoreArray(int[][] adjacentPairs) {
+        Map<Integer, List<Integer>> adjs = new HashMap();
+        for(int[] t: adjacentPairs){
+            int a = t[0], b = t[1];
+            List<Integer> ad = adjs.getOrDefault(a, new ArrayList());
+            ad.add(b);
+            adjs.put(a, ad);
+            List<Integer> bd = adjs.getOrDefault(b, new ArrayList());
+            bd.add(a);
+            adjs.put(b, bd);
+        }
+        int begin = 0;
+        for(Map.Entry<Integer, List<Integer>> entry: adjs.entrySet()){
+            int k = entry.getKey();
+            List<Integer> v = entry.getValue();
+            if(v.size() == 1) begin = k;
+        }
+        int p = begin;
+        Set<Integer> st = new HashSet();
+        int[] res = new int[adjacentPairs.length + 1];
+        int n = 0;
+        while(p != 1000000){
+            res[n ++ ] = p;
+            st.add(p);
+            int ne = 1000000;
+            List<Integer> v = adjs.get(p);
+            if(!st.contains(v.get(0))) ne = v.get(0);
+            else if(v.size() == 2) ne = v.get(1);
+            p = ne;
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:09,016 - leetcode - INFO - 获取代码:class Solution {
+    int[][] students, mentors;
+    int get(int i, int j){
+        int res = 0, n = students[0].length;
+        for(int k = 0; k < n; k ++ ){
+            if(students[i][k] == mentors[j][k]) res ++ ;
+        }
+        return res;
+    }
+    public int maxCompatibilitySum(int[][] _students, int[][] _mentors) {
+        students = _students;
+        mentors = _mentors;
+        int n = students.length;
+        int[][] f = new int[n + 1][1 << n];
+        Arrays.fill(f[0], (int)-2e9);
+        f[0][0] = 0;
+        for(int i = 1; i <= n; i ++ ){
+            for(int j = 0; j < 1 << n; j ++ ){
+                for(int k = 0; k < n; k ++ )
+                    if((j >> k & 1) == 1){
+                        f[i][j] = Math.max(f[i][j], f[i - 1][j - (1 << k)] + get(i - 1, k));
+                    }
+            }
+        }
+        return f[n][(1 << n) - 1];
+    }
+}
+2021-07-25 21:09:09,307 - leetcode - INFO - 获取代码:class Solution {
+    public String maximumNumber(String num, int[] change) {
+        int n = num.length();
+        int[] nums = new int[n];
+        StringBuilder sb = new StringBuilder(num);
+        boolean flag = false;
+        for(int i = 0; i < n; i ++ ){
+            int t = num.charAt(i) - '0';
+            if(change[t] > t) {
+                sb.setCharAt(i, (char)('0' + change[t]));
+                flag = true;
+            }
+            else if(change[t] == t && flag){
+                sb.setCharAt(i, (char)('0' + change[t]));
+                flag = true;
+            }
+            else if(flag) break;
+        }
+            
+        return sb.toString();
+    }
+}
+2021-07-25 21:09:09,423 - leetcode - INFO - 获取代码:class Solution {
+    public int getLucky(String s, int k) {
+        int n = s.length();
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < n; i ++ ){
+            sb.append(s.charAt(i) - 'a' + 1);
+        }
+        int res = 0;
+        for(int i = 0; i < sb.length(); i ++ ){
+            res += sb.charAt(i) - '0';
+        }
+        for(int i = 1; i < k; i ++ ){
+            int t = res;
+            res = 0;
+            while(t != 0){
+                res += t % 10;
+                t /= 10;
+            }
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:09,531 - leetcode - INFO - 获取代码:class Solution {
+    public boolean areOccurrencesEqual(String s) {
+        int[] cnt = new int[26];
+        int n = s.length();
+        for(int i = 0; i < n; i ++ ){
+            int t = s.charAt(i) - 'a';
+            cnt[t] ++ ;
+        }
+        int x = cnt[s.charAt(0) - 'a'];
+        for(int i = 0; i < n; i ++ ){
+            int t = s.charAt(i) - 'a';
+            if(cnt[t] != x) return false;
+        }
+        return true;
+    }
+}
+2021-07-25 21:09:09,707 - leetcode - INFO - 获取代码:class Solution {
+    public int smallestChair(int[][] times, int targetFriend) {
+        int n = times.length;
+        int at = times[targetFriend][0];
+        int[] chairs = new int[n];
+        Arrays.sort(times, (a, b)-> a[0] < b[0] ? -1: 1);
+        for(int[] t : times){
+            int a = t[0], b = t[1];
+            for(int i = 0; i < n; i ++ ){
+                if(chairs[i] <= a){
+                    chairs[i] = b;
+                    if(a == at) return i;
+                    break;
+                }
+            }
+        }
+        return -1;
+    }
+}
+2021-07-25 21:09:09,960 - leetcode - INFO - 获取代码:class Solution {
+    public int[] canSeePersonsCount(int[] heights) {
+        int n = heights.length;
+        Deque<Integer> stk = new LinkedList();
+        int[] res = new int[n];
+        for(int i = n - 1; i >= 0; i -- ){
+            int t = 0;
+            while(stk.size() > 0 && stk.peek() < heights[i]){
+                stk.pop();
+                t ++ ;
+            }
+            if(stk.size() > 0 ) t ++ ;
+            res[i] = t;
+            stk.push(heights[i]);
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:10,267 - leetcode - INFO - 获取代码:class Solution {
+    public List<List<Long>> splitPainting(int[][] segments) {
+        int n = segments.length, m = 1;
+        for(int[] t: segments) m = Math.max(t[1], m);
+        long[] vals = new long[m + 10];
+        Set<Integer> st = new HashSet();
+        for(int[] t: segments){
+            vals[t[0]] += t[2];
+            vals[t[1]] -= t[2];
+            st.add(t[0]);
+            st.add(t[1]);
+        }
+        List<List<Long>> res = new ArrayList();
+        long l = 1, cur = 0;
+        for(long i = 1; i <= m + 5; i ++ ){
+            if(st.contains((int)i)){
+                if(cur != 0){
+                    List<Long> t = new ArrayList();
+                    t.add(l);
+                    t.add(i);
+                    t.add(cur);
+                    res.add(t);
+                }
+                l = i;
+            }
+            cur += vals[(int)i];
+        }
+        return res;
+    }
+}
+2021-07-25 21:09:10,407 - leetcode - INFO - 获取代码:class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> f = new ArrayList();
+        f.add(1);
+        for(int i = 1; i <= rowIndex; i ++ )
+            f.add((int)(f.get(i - 1) * (rowIndex - i + 1L) / i));
+        return f;
+    }
+}
+2021-07-25 21:09:11,421 - leetcode - INFO - 待更新题目数量: 4
+2021-07-25 21:09:11,429 - notion - INFO - 待提交问题数量:4个
+2021-07-25 21:09:12,422 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-25 21:09:13,257 - notion - INFO - 2.两数相加: 提交成功
+2021-07-25 21:09:14,077 - notion - INFO - 1.两数之和: 提交成功
+2021-07-25 21:09:14,969 - notion - INFO - 139.单词拆分: 提交成功
+2021-07-25 21:09:14,969 - notion - INFO - 提交成功:4个
+2021-07-25 21:12:43,051 - leetcode - INFO - 登录成功!
+2021-07-25 21:12:46,920 - leetcode - INFO - 待更新题目数量: 0
+2021-07-25 21:12:46,921 - notion - INFO - 待提交问题数量:0
+2021-07-25 21:12:46,921 - notion - INFO - 提交成功:0
+2021-07-25 21:13:05,278 - leetcode - INFO - 登录成功!
+2021-07-25 21:13:05,585 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:13:05,688 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:13:05,802 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:13:05,907 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:13:06,015 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:13:06,127 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:13:06,236 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:13:06,442 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:13:06,549 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:13:06,776 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:13:06,895 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:13:07,003 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:13:07,167 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:13:07,458 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:13:07,788 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:13:07,890 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:13:08,899 - leetcode - INFO - 待更新题目数量: 4
+2021-07-25 21:13:08,899 - notion - INFO - 待提交问题数量:4
+2021-07-25 21:13:09,800 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-25 21:13:10,609 - notion - INFO - 2.两数相加: 提交成功
+2021-07-25 21:13:11,414 - notion - INFO - 1.两数之和: 提交成功
+2021-07-25 21:13:12,183 - notion - INFO - 139.单词拆分: 提交成功
+2021-07-25 21:13:12,184 - notion - INFO - 提交成功:4
+2021-07-25 21:15:26,052 - leetcode - INFO - 登录成功!
+2021-07-25 21:15:26,327 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:15:26,452 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:15:26,563 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:15:26,675 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:15:26,789 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:15:26,902 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:15:27,013 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:15:27,269 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:15:27,385 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:15:27,621 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:15:27,738 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:15:27,845 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:15:28,027 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:15:28,295 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:15:28,596 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:15:28,707 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:15:29,721 - leetcode - INFO - 待更新题目数量: 0
+2021-07-25 21:15:29,721 - notion - INFO - 待提交问题数量:0
+2021-07-25 21:15:29,722 - notion - INFO - 提交成功:0
+2021-07-25 21:15:51,225 - leetcode - INFO - 登录成功!
+2021-07-25 21:15:51,486 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:15:51,605 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:15:51,717 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:15:51,826 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:15:51,995 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:15:52,128 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:15:52,311 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:15:52,623 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:15:52,782 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:15:53,015 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:15:53,137 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:15:53,269 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:15:53,432 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:15:53,694 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:15:53,996 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:15:54,105 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:15:55,106 - leetcode - INFO - 待更新题目数量: 4
+2021-07-25 21:15:55,108 - notion - INFO - 待提交问题数量:4
+2021-07-25 21:15:56,001 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-25 21:15:56,938 - notion - INFO - 2.两数相加: 提交成功
+2021-07-25 21:15:57,753 - notion - INFO - 1.两数之和: 提交成功
+2021-07-25 21:15:58,578 - notion - INFO - 139.单词拆分: 提交成功
+2021-07-25 21:15:58,579 - notion - INFO - 提交成功:4
+2021-07-25 21:17:55,744 - leetcode - INFO - 登录成功!
+2021-07-25 21:17:56,005 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:17:56,112 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:17:56,286 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:17:56,475 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:17:56,580 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:17:56,688 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:17:56,797 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:17:57,013 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:17:57,184 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:17:57,410 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:17:57,521 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:17:57,668 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:17:57,850 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:17:58,109 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:17:58,390 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:17:58,500 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:17:59,502 - leetcode - INFO - 待更新题目数量: 4
+2021-07-25 21:17:59,503 - notion - INFO - 待提交问题数量:4
+2021-07-25 21:18:00,416 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-25 21:18:01,298 - notion - INFO - 2.两数相加: 提交成功
+2021-07-25 21:18:02,216 - notion - INFO - 1.两数之和: 提交成功
+2021-07-25 21:18:03,147 - notion - INFO - 139.单词拆分: 提交成功
+2021-07-25 21:18:03,147 - notion - INFO - 提交成功:4
+2021-07-25 21:18:35,417 - leetcode - INFO - 登录成功!
+2021-07-25 21:18:35,687 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:18:35,795 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:18:35,912 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:18:36,018 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:18:36,126 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:18:36,234 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:18:36,344 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:18:36,560 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:18:36,680 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:18:36,919 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:18:37,029 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:18:37,147 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:18:37,357 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:18:37,622 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:18:37,906 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:18:38,011 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:18:39,018 - leetcode - INFO - 待更新题目数量: 4
+2021-07-25 21:18:39,018 - notion - INFO - 待提交问题数量:4
+2021-07-25 21:18:39,895 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-25 21:18:40,728 - notion - INFO - 2.两数相加: 提交成功
+2021-07-25 21:18:41,532 - notion - INFO - 1.两数之和: 提交成功
+2021-07-25 21:18:42,355 - notion - INFO - 139.单词拆分: 提交成功
+2021-07-25 21:18:42,355 - notion - INFO - 提交成功:4
+2021-07-25 21:23:23,546 - leetcode - INFO - 登录成功!
+2021-07-25 21:23:23,902 - leetcode - INFO - 199699166获取代码:937字
+2021-07-25 21:23:24,117 - leetcode - INFO - 199699121获取代码:792字
+2021-07-25 21:23:24,243 - leetcode - INFO - 199699096获取代码:380字
+2021-07-25 21:23:24,395 - leetcode - INFO - 199583983获取代码:1120字
+2021-07-25 21:23:24,523 - leetcode - INFO - 199583632获取代码:1106字
+2021-07-25 21:23:24,755 - leetcode - INFO - 199567112获取代码:605字
+2021-07-25 21:23:24,887 - leetcode - INFO - 199566179获取代码:671字
+2021-07-25 21:23:25,110 - leetcode - INFO - 199556393获取代码:1138字
+2021-07-25 21:23:25,219 - leetcode - INFO - 199514937获取代码:874字
+2021-07-25 21:23:25,462 - leetcode - INFO - 199509377获取代码:672字
+2021-07-25 21:23:25,585 - leetcode - INFO - 199498127获取代码:566字
+2021-07-25 21:23:25,691 - leetcode - INFO - 199456932获取代码:437字
+2021-07-25 21:23:26,072 - leetcode - INFO - 199456698获取代码:561字
+2021-07-25 21:23:26,332 - leetcode - INFO - 199454072获取代码:507字
+2021-07-25 21:23:26,795 - leetcode - INFO - 199453695获取代码:901字
+2021-07-25 21:23:27,026 - leetcode - INFO - 199441050获取代码:262字
+2021-07-25 21:23:28,036 - leetcode - INFO - 待更新题目数量: 0
+2021-07-25 21:23:28,037 - notion - INFO - 待提交问题数量:0
+2021-07-25 21:23:28,037 - notion - INFO - 提交成功:0
+2021-07-26 15:02:20,806 - leetcode - INFO - 登录成功!
+2021-07-26 15:02:21,389 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:02:21,502 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:02:21,617 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:04:30,460 - leetcode - INFO - 登录成功!
+2021-07-26 15:04:30,747 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:04:30,860 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:04:30,971 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:04:30,972 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:06:18,019 - leetcode - INFO - 登录成功!
+2021-07-26 15:06:18,276 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:06:18,393 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:06:18,504 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:06:39,482 - leetcode - INFO - 登录成功!
+2021-07-26 15:06:39,748 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:06:39,864 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:06:39,976 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:07:06,518 - leetcode - INFO - 登录成功!
+2021-07-26 15:07:06,779 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:07:06,900 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:07:07,014 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:08:03,099 - leetcode - INFO - 登录成功!
+2021-07-26 15:08:03,405 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:08:03,522 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:08:03,640 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:08:03,641 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:08:25,667 - leetcode - INFO - 登录成功!
+2021-07-26 15:08:26,018 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:08:26,127 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:08:26,240 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:08:26,242 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:08:26,242 - notion - INFO - 提交成功:0
+2021-07-26 15:09:21,553 - leetcode - INFO - 登录成功!
+2021-07-26 15:09:21,819 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:09:21,933 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:09:22,041 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:09:22,044 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:09:22,044 - notion - INFO - 提交成功:0
+2021-07-26 15:15:13,531 - leetcode - INFO - 登录成功!
+2021-07-26 15:15:13,887 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:15:13,888 - leetcode - INFO - 未找到改题目, 尝试重新加载
+2021-07-26 15:15:13,888 - leetcode - INFO - 重新加载题目集!
+2021-07-26 15:15:42,422 - leetcode - INFO - 题集更新成功, 题目数量: 2173
+2021-07-26 15:15:42,551 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:15:42,672 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:15:42,788 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:15:42,915 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:15:42,916 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:15:42,918 - notion - INFO - 提交成功:0
+2021-07-26 15:18:05,176 - leetcode - INFO - 登录成功!
+2021-07-26 15:18:05,437 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:18:05,547 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:18:05,657 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:18:05,778 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:18:05,894 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:18:05,896 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:18:05,897 - notion - INFO - 提交成功:0
+2021-07-26 15:19:25,314 - leetcode - INFO - 登录成功!
+2021-07-26 15:19:42,085 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:19:42,244 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:19:42,414 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:19:42,525 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:19:43,140 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:19:52,156 - leetcode - INFO - 登录成功!
+2021-07-26 15:20:26,593 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:21:40,658 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:21:49,935 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:21:56,498 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:22:03,625 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:23:02,981 - leetcode - INFO - 登录成功!
+2021-07-26 15:23:07,043 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:23:12,035 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:23:12,167 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:23:12,290 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:23:12,422 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:23:21,016 - leetcode - INFO - 登录成功!
+2021-07-26 15:23:21,283 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:23:21,403 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:23:21,538 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:23:21,657 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:23:21,795 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:23:21,797 - notion - INFO - 待提交问题数量:5
+2021-07-26 15:23:24,358 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:23:25,882 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:23:25,882 - notion - ERROR - 4.寻找两个正序数组的中位数: 已存在!
+2021-07-26 15:23:27,391 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:23:32,558 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:23:32,559 - notion - INFO - 提交成功:4
+2021-07-26 15:24:27,689 - leetcode - INFO - 登录成功!
+2021-07-26 15:24:27,962 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:24:28,122 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:24:28,237 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:24:28,477 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:24:28,594 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:24:28,595 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:24:28,595 - notion - INFO - 提交成功:0
+2021-07-26 15:24:54,326 - leetcode - INFO - 登录成功!
+2021-07-26 15:24:54,613 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:24:54,820 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:24:54,937 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:24:55,051 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:24:55,167 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:24:55,170 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:24:57,130 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:24:58,498 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:25:00,468 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:25:01,969 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:25:01,969 - notion - INFO - 提交成功:4
+2021-07-26 15:25:59,783 - leetcode - INFO - 登录成功!
+2021-07-26 15:26:00,562 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:26:00,563 - notion - INFO - 提交成功:0
+2021-07-26 15:26:46,921 - leetcode - INFO - 登录成功!
+2021-07-26 15:26:47,626 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:26:47,627 - notion - INFO - 提交成功:0
+2021-07-26 15:26:52,099 - leetcode - INFO - 登录成功!
+2021-07-26 15:27:08,645 - leetcode - INFO - 登录成功!
+2021-07-26 15:30:36,165 - leetcode - INFO - 登录成功!
+2021-07-26 15:30:36,996 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:30:36,996 - notion - INFO - 提交成功:0
+2021-07-26 15:30:48,416 - leetcode - INFO - 登录成功!
+2021-07-26 15:31:29,575 - leetcode - INFO - 登录成功!
+2021-07-26 15:31:30,439 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:31:30,440 - notion - INFO - 提交成功:0
+2021-07-26 15:31:44,556 - leetcode - INFO - 登录成功!
+2021-07-26 15:31:44,879 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:31:44,879 - leetcode - INFO - 未找到改题目, 尝试重新加载
+2021-07-26 15:31:44,880 - leetcode - INFO - 重新加载题目集!
+2021-07-26 15:32:13,504 - leetcode - INFO - 题集更新成功, 题目数量: 2173
+2021-07-26 15:32:13,658 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:32:13,777 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:32:13,913 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:32:14,056 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:33:59,652 - leetcode - INFO - 登录成功!
+2021-07-26 15:33:59,909 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:33:59,910 - leetcode - INFO - {跳跃游戏II}未找到该题目, 尝试重新加载
+2021-07-26 15:33:59,910 - leetcode - INFO - 重新加载题目集!
+2021-07-26 15:34:28,219 - leetcode - INFO - 题集更新成功, 题目数量: 2173
+2021-07-26 15:34:28,367 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:34:28,573 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:34:28,780 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:34:28,904 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:34:29,908 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:34:29,910 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:34:32,864 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:34:34,363 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:34:37,088 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:34:38,511 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:34:38,511 - notion - INFO - 提交成功:4
+2021-07-26 15:45:57,387 - leetcode - INFO - 登录成功!
+2021-07-26 15:45:57,669 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:45:57,887 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:45:58,032 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:45:58,154 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:45:58,270 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:45:59,280 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:45:59,281 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:46:01,105 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:46:02,481 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:46:03,949 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:46:05,611 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:46:05,611 - notion - INFO - 提交成功:4
+2021-07-26 15:47:35,327 - leetcode - INFO - 登录成功!
+2021-07-26 15:47:35,609 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:47:35,726 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:47:35,853 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:47:35,958 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:47:36,066 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:47:37,072 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:47:37,074 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:47:38,860 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:47:40,230 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:47:41,927 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:47:43,571 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:47:43,571 - notion - INFO - 提交成功:4
+2021-07-26 15:48:07,091 - leetcode - INFO - 登录成功!
+2021-07-26 15:48:07,354 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:48:07,478 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:48:07,604 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:48:07,711 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:48:07,829 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:48:08,833 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:48:08,835 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:48:13,370 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:48:15,100 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:48:16,640 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:48:18,471 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:48:18,472 - notion - INFO - 提交成功:4
+2021-07-26 15:50:36,802 - leetcode - INFO - 登录成功!
+2021-07-26 15:50:37,073 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:50:37,260 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:50:37,488 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:50:37,604 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:50:37,721 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:50:38,736 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:50:38,738 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:50:40,198 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:50:41,830 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:50:43,560 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:50:45,456 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:50:45,457 - notion - INFO - 提交成功:4
+2021-07-26 15:53:17,366 - leetcode - INFO - 登录成功!
+2021-07-26 15:53:17,630 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:53:17,748 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:53:17,866 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:53:18,014 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:53:18,127 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:53:19,130 - leetcode - INFO - 待更新题目数量: 0
+2021-07-26 15:53:19,131 - notion - INFO - 待提交问题数量:0
+2021-07-26 15:53:19,131 - notion - INFO - 提交成功:0
+2021-07-26 15:53:30,723 - leetcode - INFO - 登录成功!
+2021-07-26 15:53:31,012 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:53:31,125 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:53:31,327 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:53:31,455 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:53:31,659 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:53:32,671 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:53:32,672 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:53:34,961 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:53:36,478 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:53:38,631 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:53:40,766 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:53:40,767 - notion - INFO - 提交成功:4
+2021-07-26 15:55:13,397 - leetcode - INFO - 登录成功!
+2021-07-26 15:55:13,673 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:55:13,801 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:55:13,981 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:55:14,214 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:55:14,370 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:55:15,374 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:55:15,376 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:55:17,708 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:55:19,417 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:55:20,850 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:55:22,656 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:55:22,656 - notion - INFO - 提交成功:4
+2021-07-26 15:58:32,065 - leetcode - INFO - 登录成功!
+2021-07-26 15:58:32,401 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:58:32,575 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:58:32,742 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:58:32,934 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:58:33,098 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:58:34,104 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:58:34,105 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:58:35,615 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:58:37,182 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:58:38,553 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:58:39,936 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:58:39,936 - notion - INFO - 提交成功:4
+2021-07-26 15:58:58,947 - leetcode - INFO - 登录成功!
+2021-07-26 15:58:59,293 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 15:58:59,416 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 15:58:59,530 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 15:58:59,643 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 15:58:59,769 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 15:59:00,774 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 15:59:00,775 - notion - INFO - 待提交问题数量:4
+2021-07-26 15:59:02,970 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 15:59:05,813 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 15:59:08,414 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 15:59:10,693 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 15:59:10,693 - notion - INFO - 提交成功:4
+2021-07-26 16:01:13,463 - leetcode - INFO - 登录成功!
+2021-07-26 16:01:13,817 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:01:14,062 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:01:14,228 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:01:14,343 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:01:14,522 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:01:15,538 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:01:15,539 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:01:17,164 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 16:01:21,221 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:01:22,616 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 16:01:24,178 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 16:01:24,178 - notion - INFO - 提交成功:4
+2021-07-26 16:01:44,044 - leetcode - INFO - 登录成功!
+2021-07-26 16:01:44,451 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:01:44,600 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:01:44,751 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:01:44,894 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:01:45,038 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:01:46,049 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:01:46,050 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:01:47,510 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 16:01:48,820 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:01:52,492 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 16:01:55,711 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 16:01:55,712 - notion - INFO - 提交成功:4
+2021-07-26 16:02:34,510 - leetcode - INFO - 登录成功!
+2021-07-26 16:02:34,782 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:02:34,988 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:02:35,145 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:02:35,268 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:02:35,384 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:02:36,389 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:02:36,390 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:02:37,914 - notion - INFO - 45.跳跃游戏II: 提交成功
+2021-07-26 16:02:39,381 - notion - INFO - 4.寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:02:41,196 - notion - INFO - 2.两数相加: 提交成功
+2021-07-26 16:02:43,179 - notion - INFO - 1.两数之和: 提交成功
+2021-07-26 16:02:43,179 - notion - INFO - 提交成功:4
+2021-07-26 16:21:31,738 - leetcode - INFO - 登录成功!
+2021-07-26 16:21:32,310 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:21:32,457 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:21:32,582 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:21:32,867 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:21:32,982 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:21:33,988 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:21:33,989 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:21:35,663 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:21:37,641 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:21:39,357 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:21:41,048 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:21:41,048 - notion - INFO - 提交成功:4
+2021-07-26 16:30:19,767 - leetcode - INFO - 登录成功!
+2021-07-26 16:30:20,047 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:30:20,171 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:30:20,288 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:30:20,403 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:30:20,516 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:30:21,530 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:30:21,531 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:30:23,313 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:30:25,310 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:30:26,855 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:30:28,578 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:30:28,578 - notion - INFO - 提交成功:4
+2021-07-26 16:32:45,367 - leetcode - INFO - 登录成功!
+2021-07-26 16:32:45,724 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:32:45,919 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:32:46,039 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:32:46,143 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:32:46,464 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:32:47,474 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:32:47,475 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:32:48,878 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:32:50,286 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:32:51,763 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:32:57,944 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:32:57,944 - notion - INFO - 提交成功:4
+2021-07-26 16:33:39,323 - leetcode - INFO - 登录成功!
+2021-07-26 16:33:40,001 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:33:40,109 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:33:40,222 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:33:40,336 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:33:40,445 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:33:41,460 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:33:41,462 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:33:43,088 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:33:45,244 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:33:47,685 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:33:49,651 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:33:49,651 - notion - INFO - 提交成功:4
+2021-07-26 16:34:23,819 - leetcode - INFO - 登录成功!
+2021-07-26 16:34:24,135 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:34:24,245 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:34:24,365 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:34:24,481 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:34:24,670 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:34:25,680 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:34:25,681 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:34:27,388 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:34:29,214 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:34:30,841 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:34:33,190 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:34:33,190 - notion - INFO - 提交成功:4
+2021-07-26 16:39:10,810 - leetcode - INFO - 登录成功!
+2021-07-26 16:39:11,161 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:39:11,298 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:39:11,418 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:39:11,568 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:39:11,699 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:39:12,700 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:39:12,701 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:39:14,823 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:39:16,545 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:39:18,118 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:39:19,855 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:39:19,855 - notion - INFO - 提交成功:4
+2021-07-26 16:42:43,705 - leetcode - INFO - 登录成功!
+2021-07-26 16:42:43,972 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:42:44,166 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:42:44,303 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:42:44,419 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:42:44,539 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:42:45,546 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:42:45,547 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:44:21,153 - leetcode - INFO - 登录成功!
+2021-07-26 16:44:21,420 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:44:21,558 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:44:21,693 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:44:21,809 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:44:21,927 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:44:22,938 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:44:22,938 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:45:01,257 - leetcode - INFO - 登录成功!
+2021-07-26 16:45:01,530 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:45:01,660 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:45:01,775 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:45:01,911 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:45:02,076 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:45:03,087 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:45:03,089 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:45:04,717 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:45:06,068 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:45:08,078 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:45:09,813 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:45:09,813 - notion - INFO - 提交成功:4
+2021-07-26 16:45:35,941 - leetcode - INFO - 登录成功!
+2021-07-26 16:45:36,233 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:45:36,384 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:45:36,515 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:45:36,641 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:45:36,787 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:45:37,801 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:45:37,803 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:45:45,186 - leetcode - INFO - 登录成功!
+2021-07-26 16:45:45,481 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:45:45,607 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:45:45,816 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:45:45,925 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:45:46,037 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:45:47,042 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:45:47,043 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:45:48,672 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:45:50,654 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:45:52,723 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:45:54,469 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:45:54,469 - notion - INFO - 提交成功:4
+2021-07-26 16:48:04,597 - leetcode - INFO - 登录成功!
+2021-07-26 16:48:05,087 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:48:05,209 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:48:05,344 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:48:05,451 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:48:05,570 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:48:06,581 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:48:06,583 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:48:08,232 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:48:09,788 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:48:11,280 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:48:12,777 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:48:12,777 - notion - INFO - 提交成功:4
+2021-07-26 16:49:19,706 - leetcode - INFO - 登录成功!
+2021-07-26 16:49:19,984 - leetcode - INFO - 199924624获取代码:360字
+2021-07-26 16:49:20,102 - leetcode - INFO - 199924241获取代码:937字
+2021-07-26 16:49:20,232 - leetcode - INFO - 199699166获取代码:937字
+2021-07-26 16:49:20,342 - leetcode - INFO - 199699121获取代码:792字
+2021-07-26 16:49:20,514 - leetcode - INFO - 199699096获取代码:380字
+2021-07-26 16:49:21,516 - leetcode - INFO - 待更新题目数量: 4
+2021-07-26 16:49:21,518 - notion - INFO - 待提交问题数量:4
+2021-07-26 16:49:23,568 - notion - INFO - 45. 跳跃游戏II: 提交成功
+2021-07-26 16:49:25,175 - notion - INFO - 4. 寻找两个正序数组的中位数: 提交成功
+2021-07-26 16:49:26,741 - notion - INFO - 2. 两数相加: 提交成功
+2021-07-26 16:49:28,426 - notion - INFO - 1. 两数之和: 提交成功
+2021-07-26 16:49:28,426 - notion - INFO - 提交成功:4
