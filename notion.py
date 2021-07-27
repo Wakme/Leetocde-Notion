@@ -1,6 +1,9 @@
 import requests
 import json
 import logging
+import os
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # 切换目录到当前脚本下
 
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)

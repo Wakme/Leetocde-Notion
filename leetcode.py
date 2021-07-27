@@ -6,9 +6,12 @@ import json
 import time
 import logging
 import requests
+import os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # 切换目录到当前脚本下
 
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
