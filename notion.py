@@ -1,3 +1,5 @@
+import time
+
 import requests
 import json
 import logging
@@ -37,15 +39,19 @@ def submit_questions(questions):
         if len(questions) == 0:
             break
         question = questions[0]
+        title = question['fid'] + ". " + question['title']
         if question['pid'] in visited:
             questions.remove(question)
-            logger.error(question['fid'] + ". " + question['title'] + ": 已存在!")
+            logger.error(title + ": 已存在!")
             continue
         if submit_question(question):
             cnt += 1
-            logger.info(question['fid'] + ". " + question['title'] + ": 提交成功")
+            logger.info(title + ": 提交成功")
             questions.remove(question)
             visited.append(question['pid'])
+        else:
+            logger.warning(title + ": 提交失败, 等待再次提交")
+            time.sleep(60)
     logger.info("提交成功:" + str(cnt))
     with open("visited.json", "w") as f:
         json.dump(visited, f)
@@ -57,7 +63,7 @@ def submit_question(question):
     code = parsed_code['code']
     link = leetcode_url + question['titleSlug']
     tags = parsed_code['tags']
-    print( [{"name": t} for t in tags])
+    note = parsed_code['note']
     # 官方给出的数组
     # for t in question['tags']:
     #     if len(tags) != 0:
@@ -96,13 +102,13 @@ def submit_question(question):
                                          "paragraph": {
                                              "text": [{"type": "text",
                                                        "annotations": {"bold": True, "italic": True, "color": "red"},
-                                                       "text": {"content": "算法\n"}}
+                                                       "text": {"content": "算法\n" + note}}
                                                       ]
                                          }
                                      },
                                      {
                                          "object": "block",
-                                         "type": "paragraph",
+                                            "type": "paragraph",
                                          "paragraph": {
                                              "text": [{"type": "text",
                                                        "annotations": {"bold": True, "italic": True, "color": "blue"},
@@ -132,13 +138,5 @@ def submit_question(question):
     except Exception as e:
         logger.error(question['fid'] + "." + question['title'] + ": 请求异常, 提交失败!")
         return False
-
     return r.ok
 
-
-if __name__ == '__main__':
-    str = {'pid': '1015', 'fid': '86', 'title': '分隔链表', 'titleSlug': 'partition-list', 'tags': ['链表'], 'code': ''}
-    try:
-        submit_questions([str])
-    except Exception as e:
-        print(e)

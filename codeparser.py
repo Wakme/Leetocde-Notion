@@ -8,10 +8,17 @@ def parse_code(rawCode):
             continue
         elif line.find("@Tags") != -1:
             res['tags'] = parse_tags(line)
+        elif line.find("@Note") != -1:
+            res['note'] = parse_note(line)
         else:
             code += line + "\n"
     res['code'] = code
     return res
+
+
+def parse_note(line):
+    return line[line.find(":") + 1:].strip()
+
 
 def parse_tags(line):
     res = [t.strip() for t in line[line.find(':') + 1:].split(",")]
